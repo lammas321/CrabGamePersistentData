@@ -6,8 +6,8 @@ using System.IO;
 
 namespace PersistentData
 {
-    [BepInPlugin($"lammas123.{MyPluginInfo.PLUGIN_NAME}", MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-    public class PersistentData : BasePlugin
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+    public sealed class PersistentData : BasePlugin
     {
         public override void Load()
         {
@@ -18,12 +18,18 @@ namespace PersistentData
 
             Directory.CreateDirectory(Api.PersistentDataPath);
             Directory.CreateDirectory(Api.PersistentClientDataPath);
-            foreach (string filePath in Directory.GetFiles(Api.PersistentClientDataPath))
+
+            string[] directories = Directory.GetFiles(Api.PersistentClientDataPath);
+            Api.PersistentClientDataIds.EnsureCapacity(directories.Length);
+
+            foreach (string filePath in directories)
                 if (ulong.TryParse(Path.GetFileNameWithoutExtension(Path.GetFileName(filePath)), NumberStyles.None, CultureInfo.InvariantCulture.NumberFormat, out ulong clientId))
                     Api.PersistentClientDataIds.Add(clientId);
 
-            Harmony.CreateAndPatchAll(typeof(Patches));
-            Log.LogInfo($"Loaded [{MyPluginInfo.PLUGIN_NAME} {MyPluginInfo.PLUGIN_VERSION}]");
+            Harmony harmony = new(MyPluginInfo.PLUGIN_NAME);
+            harmony.PatchAll(typeof(Patches));
+
+            Log.LogInfo($"Initialized [{MyPluginInfo.PLUGIN_NAME} {MyPluginInfo.PLUGIN_VERSION}]");
         }
     }
 }

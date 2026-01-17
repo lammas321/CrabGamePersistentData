@@ -6,8 +6,8 @@ namespace PersistentData
 {
     public static class Api
     {
-        public static string PersistentDataPath { get; internal set; } = Path.Combine([Paths.ConfigPath, $"lammas123.{MyPluginInfo.PLUGIN_NAME}", "Data"]);
-        public static string PersistentClientDataPath { get; internal set; } = Path.Combine([Paths.ConfigPath, $"lammas123.{MyPluginInfo.PLUGIN_NAME}", "ClientData"]);
+        public static string PersistentDataPath { get; internal set; } = Path.Combine(Paths.ConfigPath, MyPluginInfo.PLUGIN_GUID, "Data");
+        public static string PersistentClientDataPath { get; internal set; } = Path.Combine(Paths.ConfigPath, MyPluginInfo.PLUGIN_GUID, "ClientData");
 
         public static HashSet<ulong> PersistentClientDataIds { get; internal set; } = [];
 

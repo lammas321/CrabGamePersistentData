@@ -21,8 +21,8 @@ namespace PersistentData
         [HarmonyPostfix]
         internal static void PostLobbyManagerStartLobby()
         {
-            ClientDataFile hostFile = Api.GetClientDataFile(Utility.ClientId);
-            hostFile.Set("Username", SteamFriends.GetFriendPersonaName(Utility.CSteamId));
+            ClientDataFile hostFile = Api.GetClientDataFile(SteamUser.GetSteamID().m_SteamID);
+            hostFile.Set("Username", SteamFriends.GetFriendPersonaName(SteamUser.GetSteamID()));
             hostFile.SaveFile();
         }
 
